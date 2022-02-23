@@ -16,38 +16,38 @@ def filter_list(list: list) -> list:
     return list_filtered
 
 
-def main() -> None:
+def main() -> pd.DataFrame:
     url = 'https://www.cambioschaco.com.py/'
     page = requests.get(url).content
 
     status = requests.get(url).status_code
-
     if status != 200:
-        print('Page error')
-    else:
-        soup = BeautifulSoup(page, 'html.parser')
+        return 'Page error'
 
-        # Se filtra la tabla por nombres, compra y ventas
-        table_coins = soup.find(id='main-exchange-content')
-        all_coins_names = table_coins.find_all('a')
-        all_coins_purchase = table_coins.find_all(class_='purchase')
-        all_coins_sale = table_coins.find_all(class_='sale')
+    soup = BeautifulSoup(page, 'html.parser')
 
-        coins_name = filter_list(all_coins_names)
-        coins_purchase = filter_list(all_coins_purchase)
-        coins_sale = filter_list(all_coins_sale)
+    # Se filtra la tabla por nombres, compra y ventas
+    table_coins = soup.find(id='main-exchange-content')
+    all_coins_names = table_coins.find_all('a')
+    all_coins_purchase = table_coins.find_all(class_='purchase')
+    all_coins_sale = table_coins.find_all(class_='sale')
 
-        table = pd.DataFrame(
-            {
-                'Moneda': coins_name,
-                'Compra': coins_purchase,
-                'Venta': coins_sale
-            }
-        )
-        print(table)
+    coins_name = filter_list(all_coins_names)
+    coins_purchase = filter_list(all_coins_purchase)
+    coins_sale = filter_list(all_coins_sale)
 
-        # print(tableCoins)
+    table = pd.DataFrame(
+        {
+            'Moneda': coins_name,
+            'Compra': coins_purchase,
+            'Venta': coins_sale
+        }
+    )
+
+    return table
+
+    # print(tableCoins)
 
 
 if __name__ == "__main__":
-    main()
+    print(main())
