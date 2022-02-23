@@ -61,33 +61,6 @@ def buttonPrecio(update, context):
     )
 
 
-"""
-def menuLink(update, context):
-    link500 = 'https://www.stock.com.py/products/2644-yerba-mate-menta-y-boldo-kurupi-500gr.aspx'
-    link250 = 'https://www.stock.com.py/products/8236-yerba-mate-kurupi-x-250-grs.aspx'
-    keyboard = [
-        [
-            InlineKeyboardButton('Kurupi de 500Gr', callback_data=link500),
-            InlineKeyboardButton('Kurupi de 250Gr', callback_data=link250)
-        ]
-    ]
-    # escuchando la eleccion
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    # titulo del menu
-    update.message.reply_text('Links de Stock: ', reply_markup=reply_markup)
-
-
-def buttonLink(update, context):
-    query = update.callback_query
-    # CallbackQueries need to be answered, even if no notification to the user is needed
-    # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
-    query.answer()
-    query.edit_message_text(
-        text="El : {}".format(query.data)
-    )
-"""
-
-
 def main():
     """Inicia el bot con un TOKEN"""
     updater = Updater(
@@ -101,18 +74,11 @@ def main():
     dp.add_handler(CommandHandler("buscar", menuPrecio))
 
     updater.dispatcher.add_handler(CallbackQueryHandler(buttonPrecio))
-    # updater.dispatcher.add_handler(CallbackQueryHandler(buttonLink))
 
-    # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
-    # is the original dp.add_handler(MessageHandler(Filters.text, echo))
 
-    # Start the Bot
     updater.start_polling()
 
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
 
