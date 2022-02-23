@@ -1,68 +1,53 @@
-if __name__ == "__main__":
-    # se importa la libreria para recoger los datos de la pagina
-    from bs4 import BeautifulSoup
-    import requests
-    import pandas as pd
+# se importa la libreria para recoger los datos de la pagina
+from bs4 import BeautifulSoup
+import requests
+import pandas as pd
 
+
+def filter_list(list: list) -> list:
+    """
+    Recibe una lista, filtra los textos dentro de la etiqueta al final retorna la lista tratada.
+    """
+    list_filtered = []
+    for item in list:
+        item = item.text
+        list_filtered.append(item)
+
+    return list_filtered
+
+
+def main() -> None:
     url = 'https://www.cambioschaco.com.py/'
-    page = requests.get(url)
-    # Se carga el contenido del html
-    url = 'https://www.cambioschaco.com.py/'
-    page = requests.get(url)
+    page = requests.get(url).content
 
-    # contenido de la pagina y html parse para que interprete como html
-    soup = BeautifulSoup(page.content, 'html.parser')
+    status = requests.get(url).status_code
 
-    error = soup.find(text='502 Bad Gateway')
-
-    if error:
-        print(error)
+    if status != 200:
+        print('Page error')
     else:
-        
-        # Nombre de las monedas, Compras y Ventas
-        coinName = soup.find_all('a')
-        purchase = soup.find_all('span', class_='purchase')
-        sale = soup.find_all('span', class_='sale')
-        monedas = list()
-        compras = list()
-        ventas = list()
-        count = 0
-        # Se saca los datos de las etiquetas <a>
-        for i in coinName:
-            # se filtra los datos de los nombres de las monedas en la lista
-            if count > 14 and count < 37:
-                # se guarda los valores en una lista
-                monedas.append(i.text)
-                count += 1
-                # Se guarda los datos de las compras
-            
-            count2 = 0
-            for j in purchase:
-                # se filtra la cantidad de valores
-                if count2 < 22:
-                    compras.append(j.text)
-                else:
-                    break
-                count2 += 1
-            # Se guarda los datos de las ventas
-            count3 = 0
-            for h in sale:
-                # se filtra la cantidad de valores
-                if count3 < 22:
-                    ventas.append(h.text)
-                else:
-                    break
-                count3 += 1
-            # se crea un diccionario para tener una vista de tabla de los valores
-            # se utiliza la libreria panda para generar el diccionario
-            df = pd.DataFrame(
-                {
-                    'Monedas': monedas,
-                    'Compras': compras,
-                    'Ventas': ventas
-                },
-                index=list(range(1, 23))
-            )
-            print(df)
-            print("Dolar:\nCompra:", compras[0], "\nVenta:", ventas[0])
-            
+        soup = BeautifulSoup(page, 'html.parser')
+
+        # Se filtra la tabla por nombres, compra y ventas
+        table_coins = soup.find(id='main-exchange-content')
+        all_coins_names = table_coins.find_all('a')
+        all_coins_purchase = table_coins.find_all(class_='purchase')
+        all_coins_sale = table_coins.find_all(class_='sale')
+
+        coins_name = filter_list(all_coins_names)
+        coins_purchase = filter_list(all_coins_purchase)
+        coins_sale = filter_list(all_coins_sale)
+
+        table = pd.DataFrame(
+            {
+                'Moneda': coins_name,
+                'Compra': coins_purchase,
+                'Venta': coins_sale
+            }
+        )
+        print(table)
+
+        # print(tableCoins)
+
+
+if __name__ == "__main__":
+    main()
