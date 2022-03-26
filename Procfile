@@ -1,1 +1,1 @@
-web: python Demo_kurupi_bot.py
+bot: python Demo_kurupi_bot.py
