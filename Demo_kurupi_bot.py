@@ -36,7 +36,7 @@ def echo(update, context):
         update.message.reply_text("Envíe /menu para saber que hacer")
 
 
-# Menu de opciones  para distintos datos
+# Menu de opciones  para distintos datos 
 def menuPrecio(update, context):
     kurupi250 = precioK250
     kurupi500 = precioK500
