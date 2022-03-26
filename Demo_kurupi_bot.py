@@ -58,7 +58,7 @@ def buttonPrecio(update, context):
     # CallbackQueries necesita una respuesta para seguir
     query.answer()
     query.edit_message_text(
-        text="El precio es de la yerba es de: {}".format(query.data)
+        text="El precio de la yerba es : {}".format(query.data)
     )
 
 
