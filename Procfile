@@ -1,0 +1,1 @@
+web: python Demo_kurupi_bot.py

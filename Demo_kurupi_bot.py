@@ -1,6 +1,7 @@
 import logging
 # Importar libreria de precios de la yerba
 from yerba import *
+import os
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
@@ -61,37 +62,10 @@ def buttonPrecio(update, context):
     )
 
 
-"""
-def menuLink(update, context):
-    link500 = 'https://www.stock.com.py/products/2644-yerba-mate-menta-y-boldo-kurupi-500gr.aspx'
-    link250 = 'https://www.stock.com.py/products/8236-yerba-mate-kurupi-x-250-grs.aspx'
-    keyboard = [
-        [
-            InlineKeyboardButton('Kurupi de 500Gr', callback_data=link500),
-            InlineKeyboardButton('Kurupi de 250Gr', callback_data=link250)
-        ]
-    ]
-    # escuchando la eleccion
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    # titulo del menu
-    update.message.reply_text('Links de Stock: ', reply_markup=reply_markup)
-
-
-def buttonLink(update, context):
-    query = update.callback_query
-    # CallbackQueries need to be answered, even if no notification to the user is needed
-    # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
-    query.answer()
-    query.edit_message_text(
-        text="El : {}".format(query.data)
-    )
-"""
-
-
 def main():
     """Inicia el bot con un TOKEN"""
-    updater = Updater(
-        " ", use_context=True)
+    token = os.environ['TOKEN']
+    updater = Updater(token=token, use_context=True)
 
     dp = updater.dispatcher
 
